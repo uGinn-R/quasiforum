@@ -21,7 +21,6 @@ namespace quasiforum
             {"Register","Регистрация"},
             {"Login","Войти"},
             {"Name","Имя"},
-            {"Collection Type","Тип коллекции"},
             {"Created","Создано"},
             {"Create","Создать"},
             {"Description","Описание"},
@@ -45,22 +44,6 @@ namespace quasiforum
             {"Loading","Загрузка"},
             {"Topics:","Все топики:"},
             {"Personalize:","Персонализация:"},
-            {"None","Отсутствует"},
-            {"Games","Игры"},
-            {"Books","Книги"},
-            {"Music","Музыка"},
-            {"Movies","Фильмы"},
-            {"Enter your comment:","Введите комменатрий:"},
-            {"Comments","Комментарии"},
-            {"SEND","Отправить"},
-            {"LIKE","Нравится"},
-            {"Optional Items fields for this collection","Опциональные поля айтемов в коллекции"},
-            {"CHECKBOX","Чекбоксы"},
-            {"STRING","Строки"},
-            {"NUMBER","Числа"},
-            {"TEXT (MARKDOWN)","Текст с оформлением"},
-            {"DATE","Даты"},
-            {"Property name","Имя поля"},
             {"Show more","Развернуть"},
             {"Show less","Свернуть"},
             {"Newest Topics","Последние топики"},
@@ -70,8 +53,6 @@ namespace quasiforum
             { "Message","Сообщение"},
             { "Registered","Зарегистрирован"},
             { "Topic starter","Создатель"}
-            
-
         };
         public static Dictionary<string, string> EN = new Dictionary<string, string>();
 
