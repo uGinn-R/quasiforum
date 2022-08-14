@@ -1,0 +1,82 @@
+﻿@page
+@model quasiforum.Pages.Collections.CollectionsModel
+@{
+    ViewData["Title"] = @Locale.Translations["Topics"];
+}
+
+@*<script src="https://cdn.jsdelivr.net/npm/jquery/dist/jquery.min.js" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>*@
+
+<script src="~/js/dataTable.js"></script>
+
+<h1>@Locale.Translations["Topics:"]</h1>
+<section class="py-5">
+    <div class="container-fluid">
+        <table id="dataTable" class="table" style="width:100%">
+
+            <thead>
+                <tr>
+                    <th>@Locale.Translations["Name"]</th>
+
+                    <th>@Locale.Translations["Description"]</th>
+
+                    <th>@Locale.Translations["Posts Count"]</th>
+
+                    <th>@Locale.Translations["Created"]</th>
+                </tr>
+            </thead>
+            <tbody>
+
+                @foreach (var item in Model.collection)
+                {
+                    var topicAuthor = @UserManager.FindByIdAsync(@item.TopicAuthorID);
+                <tr>
+                    <td>
+                        <div class="d-flex align-items-center">
+                            <img src="@item.imagePath"
+                                 alt=""
+                                 style="width: 45px; height: 45px"
+                                 class="rounded-circle" />
+                            <div class="ms-3">
+                                <p class="fw-bold mb-1"><a asp-page="/Collections/CollectionDetails" asp-route-Id="@item.id">@item.Name</a></p>
+                                <p style="font-size:small">@Locale.Translations["Topic starter"]: @topicAuthor.Result.UserName</p>
+
+                            </div>
+
+                        </div>
+
+                        @if (@item.TopicAuthorID == UserManager.GetUserId(User))
+                        {
+                            <a asp-page="/Collections/Edit" asp-route-Id="@item.id" class="btn btnPost btn-info btn-sm" style="max-height:50%"><i class="fa fa-pencil-square-o" aria-hidden="true"></i> @Locale.Translations["Edit"]</a>
+                            <button type="button" class="btn btn-outline-danger btn-sm dropdown-toggle" data-toggle="dropdown">
+                                <i class="fa fa-trash-o" aria-hidden="true"></i> @Locale.Translations["Delete"]
+                            </button>
+                            <div class="dropdown-menu dropdown-menu-right text-center">
+                                <div class="dropdown-header" style="color:red">@Locale.Translations["Confirm delete"]</div>
+                                <form method="post">
+                                    <button type="button" class="btn btn-sm btn-success" data-toggle="dropdown"><i class="fa fa-window-close" aria-hidden="true"></i> @Locale.Translations["NO"]</button>
+                                    <input type="hidden" name="colId" value="@item.id" />
+                                    <button type="submit" asp-page-handler="Delete" class="btn btn-sm btn-danger"><i class="fa fa-check-square" aria-hidden="true"></i> @Locale.Translations["YES"]</button>
+                                </form>
+                            </div>
+                        }
+
+                    </td>
+
+                    <td>
+                        <span class="fw-normal mb-1">@Html.Raw(item.Description)</span>
+                    </td>
+
+                    <td>
+                        <span class="fw-normal mb-1">@Model.GetItemsCount(item)</span>
+                    </td>
+                    <td>
+                        <p class="fw-normal mb-1">@item.CreationDate</p>
+                    </td>
+                </tr>
+
+                }
+            </tbody>
+        </table>
+    </div>
+</section>

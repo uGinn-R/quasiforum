@@ -1,0 +1,96 @@
+﻿
+@page
+@model quasiforum.Pages.Items.EditModel
+@{
+    var title = Model.post.id > 0 ? @Locale.Translations["Edit"] : @Locale.Translations["Create"];
+    ViewData["Title"] = title;
+}
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+
+    <!-- include summernote css/js -->
+    <link href="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote.min.js"></script>
+
+    <script>
+        $(document).ready(function () {
+            var ApplyBTN = document.getElementsByClassName("btnPost");
+            $('form').on("submit", function () {
+                $(ApplyBTN).html(
+                        '<i class="fa fa-circle-o-notch fa-spin"></i> @Locale.Translations["Loading"]...'
+                    );
+            });
+        });
+    </script>
+</head>
+
+<form method="post" class="was-validated" enctype="multipart/form-data" onkeydown="return event.key != 'Enter';">
+    <div class="row">
+        <div class="col">
+
+            <input type="hidden" asp-for="@Model.post.id" />
+            @*<input type="hidden" asp-for="@Model.post.imagePath" />*@
+            <input type="hidden" asp-for="@Model.TopicId" />
+            <input type="hidden" asp-for="@Model.post.CreationDate" />
+
+            <section class="py-5">
+                <div class="row align-items-center">
+                    @*<div class="col-md-3"><img class="card-img-top mb-5 mb-md-0" src="@Model.post.imagePath" alt="title_image" /></div>*@
+                    <div class="col-md">
+
+                        <h2 class="display-5 fw-bolder">@title</h2>
+
+                        @*<div class="card mb-2">
+            <div class="card-header">@Locale.Translations["Name"]:</div>
+            <div class="card-body">
+                <div class="input-group">
+                    <input class="form-control" asp-for="post.Name" type="text" placeholder="" required />
+                </div>
+                <span asp-validation-for="post.Name" class="text-danger"></span>
+            </div>
+        </div>*@
+
+                        <div class="card mb-2">
+                            <div class="card-header">@Locale.Translations["Description"]:</div>
+                            <div class="card-body">
+
+                                @*<div id="summernote"></div>*@
+                                <textarea class="form-control" id="summernote" asp-for="post.Description"></textarea>
+                                <script>
+                                    $('#summernote').summernote({
+                                        placeholder: '@Model.post.Description',
+                                        tabsize: 2,
+                                        height: 100
+                                    });
+                                </script>
+                            </div>
+                        </div>
+
+                        @*  <div class="card mb-2">
+            <div class="card-header">@Locale.Translations["Select image (drag and drop supported):"]</div>
+            <div class="card-body">
+                <div class="custom-file">
+
+                    <input asp-for="Image" class="custom-file-input form-control text-center" />
+
+                </div>
+            </div>
+        </div> *@
+
+
+                        <button type="submit" class="btn btnPost btn-success"><i class="fa fa-check-square-o" aria-hidden="true"></i> @Locale.Translations["Apply"]</button>
+                    </div>
+                </div>
+            </section>
+        </div>
+    </div>
+
+    @section Scripts
+        {
+        @*<partial name="_ValidationScriptsPartial" />*@
+
+    }
+</form>

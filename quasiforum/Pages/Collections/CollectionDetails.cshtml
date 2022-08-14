@@ -1,0 +1,120 @@
+﻿@page
+@model quasiforum.Pages.Collections.CollectionDetailsModel
+@{
+    ViewData["Title"] = $"{Locale.Translations["Details"]}";
+    AppUser user = await UserManager.GetUserAsync(User);
+}
+@using Microsoft.AspNetCore.Identity
+@inject SignInManager<AppUser> SignInManager
+@inject UserManager<AppUser> UserManager
+
+<script>
+        $(document).ready(function () {
+            $(".btn").click(function () {
+                $(this).html(
+                    '<i class="fa fa-circle-o-notch fa-spin"></i> @Locale.Translations["Loading"]...'
+                );
+            });
+        });
+</script>
+<section class="py-5">
+    <div class="row align-items-center">
+        <div class="col-3 col-md-2"><img class="card-img-top mb-5 mb-md-0 rounded-pill img-fluid" src="@Model.Topic.imagePath" alt="title_image" /></div>
+        <div class="col-8 col-md-8" style="word-wrap:break-word">
+            <h1 class="display-5 fw-bolder">@Model.Topic.Name</h1>
+            @Markdown.ParseHtmlString(Model.Topic.Description)
+        </div>
+    </div>
+</section>
+<section class="py-5">
+    <div class="container-fluid">
+
+        @if (Model.items.Count() > 0)
+        {
+            <h3 class="fw-bolder mb-4">@Locale.Translations["Topic posts:"]</h3>
+            <script src="~/js/dataTable.js"></script>
+            <script>
+        $(document).ready(function () {
+        $('.collapser').collapser({
+            mode: 'lines',
+            truncate: 5,
+            showText: '@Locale.Translations["Show more"]',
+            hideText: '@Locale.Translations["Show less"]'
+        });
+});
+            </script>
+            <table id="dataTable" class="table align-middle mb-0" style="width:100%">
+
+                <thead>
+                    <tr>
+                        <th>@Locale.Translations["Name"]</th>
+                        <th>@Locale.Translations["Message"]</th>
+                        @*<th>@Locale.Translations["Actions"]</th>*@
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model.items)
+                    {
+                        var postAuthor = @UserManager.FindByIdAsync(@item.OwnerId);
+
+                        <tr>
+                            <td>
+                                <div class="d-flex align-items-center">
+                                    <img src="@postAuthor.Result.AvatarImagePath"
+                                         alt=""
+                                         style="width: 50px; height: 50px"
+                                         class="rounded-circle" />
+                                    <div class="ms-3">
+                                        <p class="fw-bold mb-1 d-flex">@postAuthor.Result.UserName</p>
+
+                                        <p style="font-size:x-small; color:coral">@Locale.Translations["Registered"]: @postAuthor.Result.Registered</p>
+                                        <p style="font-size:small">@Locale.Translations["Posted"]: @item.CreationDate</p>
+                                    </div>
+                                </div>
+
+                               
+                                            @if (@item.OwnerId == UserManager.GetUserId(User))
+                                            {
+                                                <a asp-page="/Items/Edit" asp-route-Id="@item.id" class="btn btnPost btn-info btn-sm" style="max-height:50%"><i class="fa fa-pencil-square-o" aria-hidden="true"></i> @Locale.Translations["Edit"]</a>
+                                                <button type="button" class="btn btn-danger btn-sm dropdown-toggle" data-toggle="dropdown">
+                                                    <i class="fa fa-trash-o" aria-hidden="true"></i> @Locale.Translations["Delete"]
+                                                </button>
+                                                <div class="dropdown-menu text-center">
+                                                    <div class="dropdown-header">@Locale.Translations["Confirm delete"]</div>
+                                                    <form method="post">
+                                                        <button type="button" class="btn btn-sm btn-success" data-toggle="dropdown"><i class="fa fa-window-close" aria-hidden="true"></i> @Locale.Translations["NO"]</button>
+                                                        <input type="hidden" name="itemId" value="@item.id" />
+                                                        <button type="submit" asp-page-handler="Delete" class="btn btn-sm btn-danger"><i class="fa fa-check-square" aria-hidden="true"></i> @Locale.Translations["YES"]</button>
+                                                    </form>
+                                                </div>
+                                            }
+                           
+
+                            </td>
+                            <td>
+                                <div class="text-break overflow-hidden mb-1 collapser" style="word-wrap: break-word">@Html.Raw(item.Description)</div>
+                               
+                                           
+                            </td>
+                            @*<td>
+                                <a asp-page="/Items/ItemDetails" asp-route-Id="@item.id" asp-page-handler="ViewItem" class="btn btn-outline-warning btn-sm">
+                                    <i class="fa fa-eye" aria-hidden="true"></i>
+                                    @Locale.Translations["View"]
+                                </a>
+                            </td>*@
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        }
+        @{
+            if (User.Identity.IsAuthenticated)
+            {
+                //if (user.Id == Model.Topic.TopicAuthorID)
+                //{
+                <a asp-page="/Items/Edit" asp-route-Id="@Model.Topic.id" asp-page-handler="CreateItem" class="btn btn-success btn-sm" style="width:100%"><i class="fa fa-plus" aria-hidden="true"></i> @Locale.Translations["Add post"]</a>
+                //}
+            }
+        }
+    </div>
+</section>

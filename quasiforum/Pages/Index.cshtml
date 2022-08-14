@@ -1,0 +1,90 @@
+﻿@page
+@model IndexModel
+@{
+    ViewData["Title"] = Locale.Translations["Home"];
+}
+<head>
+    <script>
+        $(document).ready(function () {
+            $('#dataTable').DataTable({
+                "pageLength": 5, order: [[2, 'desc']],
+                "lengthMenu": [5],
+                "responsive": true,
+                "searching": false,
+                "info": false
+            });
+        });
+    </script>
+    <script>
+        $(document).ready(function () {
+            $(".btn").click(function () {
+                $(this).html(
+                    '<i class="fa fa-circle-o-notch fa-spin"></i> @Locale.Translations["Loading"]...'
+                );
+            });
+        });
+    </script>
+    <script>
+        $(document).ready(function () {
+        $('.collapser').collapser({
+            mode: 'words',
+            truncate: 20,
+            showText: '@Locale.Translations["Show more"]',
+            hideText: '@Locale.Translations["Show less"]'
+        });
+});
+    </script>
+</head>
+<body>
+    <div class="text-center">
+        <h1 class="display-4">@Locale.Translations["Hello"] @User.Identity.Name!</h1>
+        
+
+        <h3>@Locale.Translations["Newest Topics"]</h3>
+        <div class="container-fluid">
+            <table id="dataTable" class="table" style="width:100%; text-align:left">
+                <thead>
+                    <tr>
+                        <th>@Locale.Translations["Name"]</th>
+
+                        <th>@Locale.Translations["Posts Count"]</th>
+
+                        <th>@Locale.Translations["Created"]</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @{
+                        foreach (var item in Model.AllTopics)
+                        {
+
+                                        <tr>
+                                            <td>
+                                                <div class="d-flex align-items-center">
+                                                    <img src="@item.imagePath"
+                                                         alt=""
+                                                         style="width: 45px; height: 45px"
+                                                         class="rounded-circle" />
+                                                    <div class="ms-3">
+                                                        <p class="fw-bold mb-1"><a asp-page="/Collections/CollectionDetails" asp-route-Id="@item.id">@item.Name</a></p>
+                                                    </div>
+
+                                                </div>
+                                            </td>
+
+
+                                            <td>
+                                                <span class="fw-normal mb-1">@Model.GetItemsCount(item)</span>
+                                            </td>
+
+                                            <td>
+                                                <p class="fw-normal mb-1">@item.CreationDate</p>
+                                            </td>
+                                        </tr>
+
+                        }
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</body>
