@@ -123,7 +123,7 @@
                                     <div class="dropdown-header" style="color:red">@Locale.Translations["Confirm delete"]</div>
                                     <form method="post">
                                         <button type="button" class="btn btn-sm btn-success" data-toggle="dropdown"><i class="fa fa-window-close" aria-hidden="true"></i> @Locale.Translations["NO"]</button>
-                                        <input type="hidden" name="colId" value="@item.id" />
+                                        <input type="hidden" name="topicId" value="@item.id" />
                                         <button type="submit" asp-page-handler="Delete" class="btn btn-sm btn-danger"><i class="fa fa-check-square" aria-hidden="true"></i> @Locale.Translations["YES"]</button>
                                     </form>
                                 </div>
